@@ -13,6 +13,14 @@ public class AuthService {
         return repository.save(user);
     }
 
+    public User findByUserId(String userId) {
+        return repository.findByUserId(userId);
+    }
+
+    public boolean existsByUserId(String userId) {
+        return repository.existsByUserId(userId);
+    }
+
     public void delete(User user) {
         repository.delete(user);
     }
