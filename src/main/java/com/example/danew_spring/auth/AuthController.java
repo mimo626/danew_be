@@ -1,5 +1,6 @@
 package com.example.danew_spring.auth;
 
+import com.example.danew_spring.JwtTokenProvider;
 import com.example.danew_spring.auth.domain.User;
 import com.example.danew_spring.auth.dto.LoginRequest;
 import com.example.danew_spring.auth.dto.LoginResponse;
@@ -16,6 +17,9 @@ import java.time.LocalDateTime;
 public class AuthController {
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     // 회원가입
     @PostMapping("/api/auth/signup")
@@ -39,15 +43,18 @@ public class AuthController {
 
         if (user == null) {
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(new LoginResponse(false, "존재하지 않는 아이디입니다."));
+                    .body(new LoginResponse(false, "존재하지 않는 아이디입니다.", null));
         }
 
         if (!user.getPassword().equals(loginRequest.getPassword())) {
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(new LoginResponse(false, "비밀번호가 일치하지 않습니다."));
+                    .body(new LoginResponse(false, "비밀번호가 일치하지 않습니다.", null));
         }
 
-        return ResponseEntity.ok(new LoginResponse(true, "로그인 성공"));
+        // JWT 토큰 발급
+        String token = jwtTokenProvider.generateToken(user.getUserId());
+
+        return ResponseEntity.ok(new LoginResponse(true, "로그인 성공", token));
     }
 
 
