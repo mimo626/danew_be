@@ -23,7 +23,7 @@ class DanewSpringApplicationTests {
 		user.setName("강민주");
 		user.setAge(24);
 		user.setGender("여성");
-		user.setCreatedAt(LocalDateTime.now());
+		user.setCreatedAt(LocalDateTime.now().toString());
 		user.setKeywordList(List.of(new String[]{"정치", "IT", "AI"}));
 		user.setCustomList(List.of(new String[]{}));
 
