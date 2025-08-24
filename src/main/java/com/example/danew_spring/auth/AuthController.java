@@ -19,10 +19,15 @@ public class AuthController {
 
     // 회원가입
     @PostMapping("/api/auth/signup")
-    public User save(@RequestBody User user) {
+    public ResponseEntity<?> save(@RequestBody User user) {
         log.info("signup: {}", user);
         user.setCreatedAt(LocalDateTime.now().toString());
-        return authService.save(user);
+        User savedUser = authService.save(user);
+        if (savedUser == null) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("회원가입 실패");
+        }
+        return ResponseEntity.ok(savedUser);
     }
 
     // 로그인
