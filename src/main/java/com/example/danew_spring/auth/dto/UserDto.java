@@ -21,7 +21,7 @@ public class UserDto {
     private String password;
     private Integer age;
     private String gender;
-    private LocalDateTime createdAt;
+    private String createdAt;
     @Convert(converter = StringListConverter.class)
     private List<String> keywordList;
     @Convert(converter = StringListConverter.class)
