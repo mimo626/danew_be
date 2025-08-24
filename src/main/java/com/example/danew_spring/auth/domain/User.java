@@ -21,7 +21,7 @@ public class User {
     private String name;
     private Integer age;
     private String gender;
-    private LocalDateTime createdAt;
+    private String createdAt;
     @Convert(converter = StringListConverter.class)
     private List<String> keywordList;
     @Convert(converter = StringListConverter.class)
@@ -29,7 +29,7 @@ public class User {
 
 
     public User(String name, String userId, String password, Integer age,
-                String gender, LocalDateTime createdAt, List<String> keywordList, List<String> customList) {
+                String gender, String createdAt, List<String> keywordList, List<String> customList) {
         this.userId = userId;
         this.password = password;
         this.name = name;
