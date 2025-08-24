@@ -8,4 +8,5 @@ import lombok.Data;
 public class LoginResponse {
     private boolean success; // 로그인 성공 여부
     private String message;  // 실패 이유 또는 성공 메시지
+    private String token; // JWT 토큰 추가
 }
