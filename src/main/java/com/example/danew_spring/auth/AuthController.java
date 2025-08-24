@@ -2,6 +2,7 @@ package com.example.danew_spring.auth;
 
 import com.example.danew_spring.auth.domain.User;
 import com.example.danew_spring.auth.dto.LoginRequest;
+import com.example.danew_spring.auth.dto.LoginResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,21 +27,24 @@ public class AuthController {
 
     // 로그인
     @PostMapping("/api/auth/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         log.info("login: {}", loginRequest);
 
-        User user = authService.findByUserId(loginRequest.getUsername());
+        User user = authService.findByUserId(loginRequest.getUserId());
 
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("존재하지 않는 아이디입니다.");
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new LoginResponse(false, "존재하지 않는 아이디입니다."));
         }
 
         if (!user.getPassword().equals(loginRequest.getPassword())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 일치하지 않습니다.");
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new LoginResponse(false, "비밀번호가 일치하지 않습니다."));
         }
 
-        return ResponseEntity.ok("success");
+        return ResponseEntity.ok(new LoginResponse(true, "로그인 성공"));
     }
+
 
     // 아이디 중복 확인
     @GetMapping("/api/auth/check-username")
