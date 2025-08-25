@@ -7,25 +7,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthService {
     @Autowired
-    private AuthRepository repository;
+    private AuthRepository authRepository;
 
     public User save(User user) {
-        return repository.save(user);
+        return authRepository.save(user);
     }
 
     public User findByUserId(String userId) {
-        return repository.findByUserId(userId);
+        return authRepository.findByUserId(userId);
     }
 
     public boolean existsByUserId(String userId) {
-        return repository.existsByUserId(userId);
+        return authRepository.existsByUserId(userId);
     }
 
     public void delete(User user) {
-        repository.delete(user);
+        authRepository.delete(user);
     }
 
     public void deleteById(Long id) {
-        repository.deleteById(id);
+        authRepository.deleteById(id);
     }
 }
