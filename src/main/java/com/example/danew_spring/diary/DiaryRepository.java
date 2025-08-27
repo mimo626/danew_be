@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
+    Diary findByDiaryId(String diaryId);
+
+    void deleteByDiaryId(String diaryId);
 }
