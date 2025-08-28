@@ -25,18 +25,19 @@ public class DiaryController {
     private JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/save")
-    public ResponseEntity<?> save(@RequestBody DiaryRequest diaryRequest,
+    public ResponseEntity<Diary> save(@RequestBody DiaryRequest diaryRequest,
                                   @RequestHeader("Authorization") String token) {
-        log.info("save Diary request: {}", diaryRequest);
+        log.info("save Diary request: {}", diaryRequest.getCreatedAt());
 
-        // 1) 토큰에서 userId 추출
+        LocalDate localDate = LocalDate.parse(diaryRequest.getCreatedAt());
+                // 1) 토큰에서 userId 추출
         String userId = jwtTokenProvider.getUserIdFromToken(token.replace("Bearer ", ""));
 
         // 2) Diary 생성
         Diary diary = new Diary(
                 UUID.randomUUID().toString(),   // diaryId 랜덤 생성
                 userId,                         // 토큰에서 추출한 userId
-                LocalDate.now(),            // 오늘 날짜
+                localDate,            // 오늘 날짜
                 diaryRequest.getContent()       // 요청 본문에서 받은 content
         );
 
@@ -52,18 +53,18 @@ public class DiaryController {
             @RequestHeader("Authorization") String token,
             @RequestParam String createdAt // "2025-08-28" 형식
     ) {
-        LocalDate localDate = LocalDate.parse(createdAt);
 
+        LocalDate localDate = LocalDate.parse(createdAt);
         // 1) 토큰에서 userId 추출
         String userId = jwtTokenProvider.getUserIdFromToken(token.replace("Bearer ", ""));
 
         // 2) 해당 유저의 날짜별 일기 조회
         Optional<Diary> optionalDiary = diaryService.findByUserIdAndCreatedAt(userId, localDate);
 
-        // 3) 결과 반환
-        return optionalDiary
-                .map(ResponseEntity::ok)                 // 값 있으면 200 + Diary
-                .orElseGet(() -> ResponseEntity.notFound().build()); // 없으면 404
+        log.info("Diary getByDate: {}", optionalDiary);
+
+        // 3) 결과 반환: 값이 없으면 body를 null로 보내서 200 OK 유지
+        return ResponseEntity.ok(optionalDiary.orElse(new Diary()));
     }
 
 }
