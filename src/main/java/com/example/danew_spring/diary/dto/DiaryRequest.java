@@ -11,4 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DiaryRequest {
     private String content;
+    private String createdAt;
 }
