@@ -19,6 +19,10 @@ public class DiaryService {
         return diaryRepository.save(diary);
     }
 
+    public Optional<Diary> findByDiaryId(String diaryId) {
+        return diaryRepository.findByDiaryId(diaryId);
+    }
+
     public Optional<Diary> findByUserIdAndCreatedAt(String userId, LocalDate createdAt){
         return diaryRepository.findByUserIdAndCreatedAt(userId, createdAt);
     }
