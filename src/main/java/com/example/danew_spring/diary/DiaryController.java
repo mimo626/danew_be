@@ -6,6 +6,7 @@ import com.example.danew_spring.diary.domain.Diary;
 import com.example.danew_spring.diary.dto.DiaryRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,7 +54,6 @@ public class DiaryController {
             @RequestHeader("Authorization") String token,
             @RequestParam String createdAt // "2025-08-28" 형식
     ) {
-
         LocalDate localDate = LocalDate.parse(createdAt);
         // 1) 토큰에서 userId 추출
         String userId = jwtTokenProvider.getUserIdFromToken(token.replace("Bearer ", ""));
@@ -66,5 +66,35 @@ public class DiaryController {
         // 3) 결과 반환: 값이 없으면 body를 null로 보내서 200 OK 유지
         return ResponseEntity.ok(optionalDiary.orElse(new Diary()));
     }
+
+    @PutMapping("/update/{diaryId}")
+    public ResponseEntity<Diary> update(
+            @PathVariable("diaryId") String diaryId,
+            @RequestBody DiaryRequest diaryRequest,
+            @RequestHeader("Authorization") String token) {
+
+        log.info("update Diary request: {}, content: {}", diaryRequest.getCreatedAt(), diaryRequest.getContent());
+
+        // 1) 토큰에서 userId 추출
+        String userId = jwtTokenProvider.getUserIdFromToken(token.replace("Bearer ", ""));
+
+        // 2) 기존 다이어리 조회
+        Diary existingDiary = diaryService.findByDiaryId(diaryId)
+                .orElseThrow(() -> new RuntimeException("Diary not found with id: " + diaryId));
+
+        // 3) 사용자 검증 (권한 체크)
+        if (!existingDiary.getUserId().equals(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        // 4) 다이어리 내용 업데이트
+        existingDiary.setContent(diaryRequest.getContent());
+
+        // 5) 저장
+        Diary updatedDiary = diaryService.save(existingDiary);
+
+        return ResponseEntity.ok(updatedDiary);
+    }
+
 
 }
