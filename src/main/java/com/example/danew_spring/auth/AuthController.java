@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -70,6 +71,17 @@ public class AuthController {
         }
         // 사용 가능한 아이디 -> true
         return ResponseEntity.ok(true);
+    }
+
+    @GetMapping("/api/auth/getUser")
+    public ResponseEntity<User> getUserInfo(@RequestHeader("Authorization") String token) {
+        // 1) 토큰에서 userId 추출
+        String userId = jwtTokenProvider.getUserIdFromToken(token.replace("Bearer ", ""));
+
+        // 2) DB에서 유저 정보 조회
+        User user = authService.findByUserId(userId);
+
+        return ResponseEntity.ok(user);
     }
 }
 
