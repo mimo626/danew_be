@@ -95,6 +95,4 @@ public class DiaryController {
 
         return ResponseEntity.ok(updatedDiary);
     }
-
-
 }
