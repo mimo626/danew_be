@@ -75,11 +75,13 @@ public class AuthController {
 
     @GetMapping("/api/auth/getUser")
     public ResponseEntity<User> getUserInfo(@RequestHeader("Authorization") String token) {
+
         // 1) 토큰에서 userId 추출
         String userId = jwtTokenProvider.getUserIdFromToken(token.replace("Bearer ", ""));
 
         // 2) DB에서 유저 정보 조회
         User user = authService.findByUserId(userId);
+        log.info("유저 조회: {}", user);
 
         return ResponseEntity.ok(user);
     }
