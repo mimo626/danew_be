@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -21,10 +22,10 @@ public class Bookmark {
     @Column(length = 45, nullable = false)
     private String articleId;
 
-    private LocalDateTime bookmarkedAt;
+    private LocalDate bookmarkedAt;
 
     // 생성자
-    public Bookmark(String userId, String articleId, LocalDateTime bookmarkedAt) {
+    public Bookmark(String userId, String articleId, LocalDate bookmarkedAt) {
         this.userId = userId;
         this.articleId = articleId;
         this.bookmarkedAt = bookmarkedAt;
