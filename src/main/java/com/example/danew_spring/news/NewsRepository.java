@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface NewsRepository extends JpaRepository<News, String> {
-    List<News> findByArticleIdIn(List<String> articleId);
+    List<News> findByIdIn(List<String> articleId);
 }

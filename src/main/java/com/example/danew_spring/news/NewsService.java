@@ -10,7 +10,7 @@ public class NewsService {
     @Autowired
     private NewsRepository newsRepository;
 
-    public News save(News news) {
-        return newsRepository.save(news);
+    public void save(News news) {
+        newsRepository.save(news);
     }
 }
