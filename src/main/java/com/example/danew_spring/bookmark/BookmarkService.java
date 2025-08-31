@@ -1,7 +1,6 @@
 package com.example.danew_spring.bookmark;
 
 import com.example.danew_spring.news.NewsRepository;
-import com.example.danew_spring.news.NewsService;
 import com.example.danew_spring.news.domain.Bookmark;
 import com.example.danew_spring.news.domain.News;
 import jakarta.transaction.Transactional;
