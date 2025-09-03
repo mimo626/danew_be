@@ -3,7 +3,7 @@ package com.example.danew_spring.bookmark;
 import com.example.danew_spring.ApiResponse;
 import com.example.danew_spring.JwtTokenProvider;
 import com.example.danew_spring.news.NewsService;
-import com.example.danew_spring.news.domain.Bookmark;
+import com.example.danew_spring.bookmark.domain.Bookmark;
 import com.example.danew_spring.news.domain.News;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,12 +44,11 @@ public class BookmarkController {
         Bookmark bookmark = new Bookmark(userId, newsRequest.getId(), LocalDate.now());
         Bookmark savedBookmark = bookmarkService.save(bookmark);
 
-        log.info("북마크 저장: {}", savedBookmark);
-
         if(savedBookmark == null) {
             ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse<>("error", "북마크 저장 실패", null));
         }
+        log.info("북마크 저장: {}", savedBookmark);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ApiResponse<>("success", "북마크 저장 성공", savedBookmark));
@@ -69,9 +68,28 @@ public class BookmarkController {
         }
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new ApiResponse<>("success", "북마크 뉴스 조회 성공", bookmarks));    }
+                .body(new ApiResponse<>("success", "북마크 뉴스 조회 성공", bookmarks));
+    }
 
-    @DeleteMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/check-bookmark/{articleId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponse<Boolean>> checkBookmark(
+            @RequestHeader("Authorization") String token, @PathVariable String articleId) {
+        try {
+            String userId = jwtTokenProvider.getUserIdFromToken(token.replace("Bearer ", ""));
+
+            Boolean isBookmark = bookmarkService.isBookmarked(userId, articleId);
+            log.info("북마크 여부: {}", isBookmark);
+
+            return ResponseEntity.ok(
+                    new ApiResponse<>("success", "북마크 여부 조회 성공", isBookmark));
+        } catch (Exception e) {
+            log.error("북마크 여부 조회 실패", e);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse<>("error", "북마크 여부 조회 실패", null));
+        }
+    }
+
+        @DeleteMapping(value = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse<Boolean>> deleteBookmark(@PathVariable String id,
                                                   @RequestHeader("Authorization") String token) {
         try {
@@ -84,7 +102,7 @@ public class BookmarkController {
         } catch (Exception e) {
             log.error("북마크 삭제 실패: {}", id, e);
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ApiResponse<>("error", "북마크 삭제 실패", false));
+                    .body(new ApiResponse<>("error", "북마크 삭제 실패", null));
         }
     }
 }
