@@ -12,14 +12,15 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @ToString
 @Slf4j
+@Data
 public class Bookmark {
 
     @Id
-    @Column(length = 45)
-    private String userId;   // PK (단일)
-
     @Column(length = 45, nullable = false)
     private String articleId;
+
+    @Column(length = 45)
+    private String userId;
 
     private LocalDate bookmarkedAt;
 
