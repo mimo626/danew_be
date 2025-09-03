@@ -30,6 +30,17 @@ public class BookmarkService {
         bookmarkRepository.deleteById(bookmarkId);
     }
 
+    public Boolean isBookmarked(String userId, String articleId) {
+        BookmarkId bookmarkId = new BookmarkId(userId, articleId);
+        Bookmark bookmark = bookmarkRepository.findById(bookmarkId);
+
+        if(bookmark == null){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
     public List<News> getUserBookmarks(String userId) {
         // userId로 북마크 조회
         List<Bookmark> bookmarks = bookmarkRepository.findByIdUserId(userId);
