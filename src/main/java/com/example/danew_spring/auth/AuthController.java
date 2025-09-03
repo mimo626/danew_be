@@ -56,10 +56,10 @@ public class AuthController {
                     .body(new ApiResponse<>("error", "비밀번호가 일치하지 않습니다.", null));
         }
 
-        // JWT 토큰 발급
-        String token = jwtTokenProvider.generateToken(user.getUserId());
+        UserResponse userResponse = new UserResponse(user.getUserId(), user.getCreatedAt());
 
-        return ResponseEntity.ok(new ApiResponse<>("success", "로그인 성공", null));
+
+        return ResponseEntity.ok(new ApiResponse<>("success", "로그인 성공", userResponse));
     }
 
 
