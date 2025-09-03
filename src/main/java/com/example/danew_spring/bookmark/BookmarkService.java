@@ -1,7 +1,8 @@
 package com.example.danew_spring.bookmark;
 
+import com.example.danew_spring.bookmark.domain.BookmarkId;
 import com.example.danew_spring.news.NewsRepository;
-import com.example.danew_spring.news.domain.Bookmark;
+import com.example.danew_spring.bookmark.domain.Bookmark;
 import com.example.danew_spring.news.domain.News;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,18 +24,25 @@ public class BookmarkService {
     }
 
     @Transactional
-    public void  deleteByUserIdAndArticleId(String userId, String articleId) {
-        bookmarkRepository.deleteByUserIdAndArticleId(userId, articleId);
+    public void deleteByUserIdAndArticleId(String userId, String articleId) {
+        // 복합키 객체 생성
+        BookmarkId bookmarkId = new BookmarkId(userId, articleId);
+        bookmarkRepository.deleteById(bookmarkId);
     }
-    public List<News> getUserBookmarks(String userId) {
-        List<Bookmark> bookmarks = bookmarkRepository.findByUserId(userId);
 
+    public List<News> getUserBookmarks(String userId) {
+        // userId로 북마크 조회
+        List<Bookmark> bookmarks = bookmarkRepository.findByIdUserId(userId);
+
+        // articleId 추출
         List<String> articleIds = bookmarks.stream()
-                .map(Bookmark::getArticleId)
+                .map(bookmark -> bookmark.getId().getArticleId()) // BookmarkId에서 articleId
                 .toList();
 
+        // 뉴스 조회
         List<News> newsList = newsRepository.findByIdIn(articleIds);
 
         return newsList;
     }
+
 }
