@@ -1,4 +1,4 @@
-package com.example.danew_spring.news.domain;
+package com.example.danew_spring.bookmark.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,26 +8,23 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@Entity
-@NoArgsConstructor
 @ToString
 @Slf4j
 @Data
+@Entity
 public class Bookmark {
 
-    @Id
-    @Column(length = 45, nullable = false)
-    private String articleId;
-
-    @Column(length = 45)
-    private String userId;
+    @EmbeddedId
+    private BookmarkId id;
 
     private LocalDate bookmarkedAt;
 
-    // 생성자
+    protected Bookmark() {}
+
     public Bookmark(String userId, String articleId, LocalDate bookmarkedAt) {
-        this.userId = userId;
-        this.articleId = articleId;
+        this.id = new BookmarkId(userId, articleId);
         this.bookmarkedAt = bookmarkedAt;
     }
+
+    // getter/setter
 }
