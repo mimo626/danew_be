@@ -1,12 +1,14 @@
 package com.example.danew_spring.diary;
 
 
+import com.example.danew_spring.ApiResponse;
 import com.example.danew_spring.JwtTokenProvider;
 import com.example.danew_spring.diary.domain.Diary;
 import com.example.danew_spring.diary.dto.DiaryRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,9 +27,9 @@ public class DiaryController {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    @PostMapping("/save")
-    public ResponseEntity<Diary> save(@RequestBody DiaryRequest diaryRequest,
-                                  @RequestHeader("Authorization") String token) {
+    @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponse<Diary>> save(@RequestBody DiaryRequest diaryRequest,
+                                                   @RequestHeader("Authorization") String token) {
         log.info("save Diary request: {}", diaryRequest.getCreatedAt());
 
         LocalDate localDate = LocalDate.parse(diaryRequest.getCreatedAt());
@@ -45,12 +47,17 @@ public class DiaryController {
         // 3) 저장
         Diary savedDiary = diaryService.save(diary);
 
-        return ResponseEntity.ok(savedDiary);
+        if(savedDiary == null) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("error", "다이어리 저장 실패", null));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse<>("success", "다이어리 저장 성공", diary));
     }
 
 
-    @GetMapping("/getByDate")
-    public ResponseEntity<Diary> getByDate(
+    @GetMapping(value = "/getByDate", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponse<Diary>> getByDate(
             @RequestHeader("Authorization") String token,
             @RequestParam String createdAt // "2025-08-28" 형식
     ) {
@@ -63,12 +70,14 @@ public class DiaryController {
 
         log.info("Diary getByDate: {}", optionalDiary);
 
-        // 3) 결과 반환: 값이 없으면 body를 null로 보내서 200 OK 유지
-        return ResponseEntity.ok(optionalDiary.orElse(new Diary()));
+        return optionalDiary.map(diary -> ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse<>("success", "다이어리 조회 성공", diary)))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.OK)
+                        .body(new ApiResponse<>("error", "다이어리 조회 실패", null)));
     }
 
-    @PutMapping("/update/{diaryId}")
-    public ResponseEntity<Diary> update(
+    @PutMapping(value = "/update/{diaryId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponse<Diary>> update(
             @PathVariable("diaryId") String diaryId,
             @RequestBody DiaryRequest diaryRequest,
             @RequestHeader("Authorization") String token) {
@@ -93,6 +102,11 @@ public class DiaryController {
         // 5) 저장
         Diary updatedDiary = diaryService.save(existingDiary);
 
-        return ResponseEntity.ok(updatedDiary);
+        if(updatedDiary == null) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("error", "다이어리 수정 실패", null));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse<>("success", "다이어리 수정 성공", updatedDiary));
     }
 }
