@@ -8,6 +8,7 @@ import com.example.danew_spring.auth.dto.UserResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class AuthController {
     private JwtTokenProvider jwtTokenProvider;
 
     // 회원가입
-    @PostMapping("/api/auth/signup")
+    @PostMapping(value = "/api/auth/signup", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse<UserResponse>> signup(@RequestBody User user) {
         log.info("signup: {}", user);
         user.setCreatedAt(LocalDateTime.now().toString());
@@ -35,12 +36,12 @@ public class AuthController {
             return ResponseEntity.ok(new ApiResponse<>("error", "이미 존재하는 아이디입니다.", null));
         }
 
-        UserResponse userResponse = new UserResponse(savedUser.getUserId(), savedUser.getCreatedAt());
+        UserResponse userResponse = new UserResponse(savedUser.getUserId(), null, savedUser.getCreatedAt());
         return ResponseEntity.ok(new ApiResponse<>("success", "회원가입 성공", userResponse));
     }
 
     // 로그인
-    @PostMapping("/api/auth/login")
+    @PostMapping(value = "/api/auth/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse<UserResponse>> login(@RequestBody LoginRequest loginRequest) {
         log.info("login: {}", loginRequest);
 
@@ -56,14 +57,17 @@ public class AuthController {
                     .body(new ApiResponse<>("error", "비밀번호가 일치하지 않습니다.", null));
         }
 
-        UserResponse userResponse = new UserResponse(user.getUserId(), user.getCreatedAt());
+        // JWT 토큰 발급
+        String token = jwtTokenProvider.generateToken(user.getUserId());
+
+        UserResponse userResponse = new UserResponse(user.getUserId(), token, user.getCreatedAt());
 
 
         return ResponseEntity.ok(new ApiResponse<>("success", "로그인 성공", userResponse));
     }
 
 
-    @GetMapping("/api/auth/check-username")
+    @GetMapping(value = "/api/auth/check-username", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse<Boolean>> checkUsername(@RequestParam String userId) {
         boolean exists = authService.existsByUserId(userId);
         log.info("유저 아이디 중복체크: {}", exists);
@@ -77,7 +81,7 @@ public class AuthController {
     }
 
 
-    @GetMapping("/api/auth/getUser")
+    @GetMapping(value = "/api/auth/getUser", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse<User>> getUserInfo(@RequestHeader("Authorization") String token) {
 
         // 1) 토큰에서 userId 추출
