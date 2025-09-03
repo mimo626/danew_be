@@ -1,6 +1,7 @@
 package com.example.danew_spring.bookmark;
 
-import com.example.danew_spring.news.domain.Bookmark;
+import com.example.danew_spring.bookmark.domain.Bookmark;
+import com.example.danew_spring.bookmark.domain.BookmarkId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
-    List<Bookmark> findByUserId(String userId);
+    List<Bookmark> findByIdUserId(String userId); // EmbeddedId 안 userId 기준 조회
 
-    void deleteByUserIdAndArticleId(String userId, String articleId);
+    void deleteById(BookmarkId bookmarkId);
 }
