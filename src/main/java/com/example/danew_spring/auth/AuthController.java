@@ -26,6 +26,8 @@ public class AuthController {
 
     // 회원가입
     @PostMapping(value = "/api/auth/signup", produces = MediaType.APPLICATION_JSON_VALUE)
+    // produces는 서버가 클라이언트에 어떤 형식으로 응답할지 지정
+    // JSON 응답을 보낼 때는 항상 produces = MediaType.APPLICATION_JSON_VALUE 권장
     public ResponseEntity<ApiResponse<UserResponse>> signup(@RequestBody User user) {
         log.info("signup: {}", user);
         user.setCreatedAt(LocalDateTime.now().toString());
