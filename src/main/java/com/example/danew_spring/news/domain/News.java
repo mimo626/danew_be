@@ -14,6 +14,7 @@ import java.util.List;
 @Builder
 @ToString
 @Slf4j
+@Data
 public class News {
 
     @Id
