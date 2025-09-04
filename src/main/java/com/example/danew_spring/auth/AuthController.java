@@ -4,6 +4,7 @@ import com.example.danew_spring.ApiResponse;
 import com.example.danew_spring.JwtTokenProvider;
 import com.example.danew_spring.auth.domain.User;
 import com.example.danew_spring.auth.dto.LoginRequest;
+import com.example.danew_spring.auth.dto.UpdateUserRequest;
 import com.example.danew_spring.auth.dto.UserResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,6 +101,40 @@ public class AuthController {
 
         return ResponseEntity.ok(new ApiResponse<>("success", "유저 정보 조회 성공", user));
     }
+
+    @PatchMapping(value = "/api/auth/updateUser", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponse<User>> updateUser(
+            @RequestHeader("Authorization") String token,
+            @RequestBody UpdateUserRequest request) {
+
+        // 1) 토큰에서 userId 추출
+        String userId = jwtTokenProvider.getUserIdFromToken(token.replace("Bearer ", ""));
+
+        // 2) 유저 조회
+        User user = authService.findByUserId(userId);
+        if (user == null) {
+            return ResponseEntity.ok(new ApiResponse<>("error", "유저를 찾을 수 없습니다.", null));
+        }
+
+        // 3) 수정할 값만 반영
+        if (request.getName() != null && !request.getName().isBlank()) {
+            user.setName(request.getName());
+        }
+        if (request.getAge() != null) {
+            user.setAge(request.getAge());
+        }
+        if (request.getGender() != null && !request.getGender().isBlank()) {
+            user.setGender(request.getGender());
+        }
+
+        // 4) DB 저장
+        User updatedUser = authService.save(user);
+
+        log.info("유저 수정: {}", updatedUser);
+
+        return ResponseEntity.ok(new ApiResponse<>("success", "유저 정보 수정 성공", updatedUser));
+    }
+
 
 }
 
