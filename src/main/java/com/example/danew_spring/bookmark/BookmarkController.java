@@ -63,10 +63,6 @@ public class BookmarkController {
         List<News> bookmarks = bookmarkService.getUserBookmarks(userId);
         log.info("북마크 뉴스 조회: {}", bookmarks);
 
-        if(bookmarks.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>("error", "북마크 뉴스 조회 실패", null));
-        }
-
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ApiResponse<>("success", "북마크 뉴스 조회 성공", bookmarks));
     }
