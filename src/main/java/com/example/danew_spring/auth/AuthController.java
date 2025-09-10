@@ -134,6 +134,35 @@ public class AuthController {
         return ResponseEntity.ok(new ApiResponse<>("success", "유저 정보 수정 성공", updatedUser));
     }
 
+    // 회원탈퇴
+    @DeleteMapping(value = "/api/auth/delete", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponse<Void>> deleteUser(
+            @RequestHeader("Authorization") String token) {
+
+        try {
+            // 1) 토큰에서 userId 추출
+            String jwt = token.replace("Bearer ", "");
+            String userId = jwtTokenProvider.getUserIdFromToken(jwt);
+
+            // 2) 유저 조회
+            User user = authService.findByUserId(userId);
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ApiResponse<>("error", "존재하지 않는 사용자입니다.", null));
+            }
+
+            // 3) DB에서 유저 삭제
+            authService.deleteUser(userId);
+
+            // 4) RefreshToken 같은 게 있다면 함께 삭제 (옵션)
+
+            return ResponseEntity.ok(new ApiResponse<>("success", "회원탈퇴가 완료되었습니다.", null));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>("error", "회원탈퇴 처리 중 오류가 발생했습니다.", null));
+        }
+    }
 
 }
 
