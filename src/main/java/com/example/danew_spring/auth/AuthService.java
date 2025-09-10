@@ -21,11 +21,7 @@ public class AuthService {
         return authRepository.existsByUserId(userId);
     }
 
-    public void delete(User user) {
-        authRepository.delete(user);
-    }
-
-    public void deleteById(Long id) {
-        authRepository.deleteById(id);
+    public void deleteUser(String userId) {
+        authRepository.deleteByUserId(userId);
     }
 }
