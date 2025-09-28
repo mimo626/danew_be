@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -132,6 +133,31 @@ public class AuthController {
         log.info("유저 수정: {}", updatedUser);
 
         return ResponseEntity.ok(new ApiResponse<>("success", "유저 정보 수정 성공", updatedUser));
+    }
+
+    @PatchMapping(value = "/api/auth/updateKeyword", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponse<User>> updateKeyword(
+            @RequestHeader("Authorization") String token,
+            @RequestBody List<String> keyword) {
+
+        // 1) 토큰에서 userId 추출
+        String userId = jwtTokenProvider.getUserIdFromToken(token.replace("Bearer ", ""));
+
+        // 2) 유저 조회
+        User user = authService.findByUserId(userId);
+        if (user == null) {
+            return ResponseEntity.ok(new ApiResponse<>("error", "유저를 찾을 수 없습니다.", null));
+        }
+        if (keyword != null) {
+            user.setKeywordList(keyword);
+        }
+
+        // 4) DB 저장
+        User updatedUser = authService.save(user);
+
+        log.info("유저 키워드 수정: {}", updatedUser);
+
+        return ResponseEntity.ok(new ApiResponse<>("success", "유저 키워드 정보 수정 성공", updatedUser));
     }
 
     // 회원탈퇴
