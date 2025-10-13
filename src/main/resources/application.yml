@@ -2,12 +2,3 @@ jwt:
   secret: hD7r9n1kG5sM7uW0jL2tQ3zX9aB8cE4rF6vH1kJ5lN0pR2sV8yQ7wT6uE3xA9mB1
   expiration: "17280000000" # 200일 (ms)
   refresh-expiration: "17280000000" # 200일 (ms)
-
-spring:
-  ai:
-
-    vertex:
-      ai:
-        gemini:
-          project-id: ${project-id}
-          location: ${location}
