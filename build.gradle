@@ -1,6 +1,8 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.5.6'
+	// 2025년 10월 현재 기준, Spring Boot 3.3.5가 최신 안정 버전 중 하나입니다.
+	// 3.5.6은 아직 출시되지 않은 버전이므로 3.3.5로 수정하는 것을 권장합니다.
+	id 'org.springframework.boot' version '3.3.5'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -18,12 +20,21 @@ repositories {
 	maven { url 'https://repo.spring.io/milestone' }
 	maven { url 'https://repo.spring.io/snapshot' }
 }
-
+dependencyManagement {
+	imports {
+		// Spring AI BOM 추가
+		mavenBom "org.springframework.boot:spring-boot-dependencies:3.3.5"
+		mavenBom "org.springframework.ai:spring-ai-bom:1.0.0-M6"
+	}
+}
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.ai:spring-ai-vertex-ai-gemini-spring-boot-starter:1.0.0-SNAPSHOT'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+//	implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
+//	implementation 'org.springframework.ai:spring-ai-starter-model-openai'
+	implementation 'org.springframework.ai:spring-ai-vertex-ai-gemini-spring-boot-starter'
 
 	// MySQL
 	runtimeOnly 'com.mysql:mysql-connector-j:8.2.0'
