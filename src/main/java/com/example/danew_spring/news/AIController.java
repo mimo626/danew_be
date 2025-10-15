@@ -32,6 +32,8 @@ public class AIController {
                     .body(new ApiResponse<>("error", "뉴스 요약 실패", null));
         }
 
+        log.info("AI 요역: {}", content);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ApiResponse<>("success", "뉴스 요약 성공", content));
     }
