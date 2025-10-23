@@ -4,7 +4,6 @@ import com.example.danew_spring.ApiResponse;
 import com.example.danew_spring.news.domain.NewsSummary;
 import com.example.danew_spring.news.repository.NewsSummaryRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
