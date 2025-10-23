@@ -1,6 +1,7 @@
-package com.example.danew_spring.news;
+package com.example.danew_spring.news.controller;
 
 
+import com.example.danew_spring.news.service.NewsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;

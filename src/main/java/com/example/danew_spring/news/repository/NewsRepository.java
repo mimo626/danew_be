@@ -1,4 +1,4 @@
-package com.example.danew_spring.news;
+package com.example.danew_spring.news.repository;
 
 import com.example.danew_spring.news.domain.News;
 import org.springframework.data.jpa.repository.JpaRepository;
