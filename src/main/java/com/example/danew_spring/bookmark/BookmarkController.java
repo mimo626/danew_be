@@ -2,7 +2,7 @@ package com.example.danew_spring.bookmark;
 
 import com.example.danew_spring.ApiResponse;
 import com.example.danew_spring.JwtTokenProvider;
-import com.example.danew_spring.news.NewsService;
+import com.example.danew_spring.news.service.NewsService;
 import com.example.danew_spring.bookmark.domain.Bookmark;
 import com.example.danew_spring.news.domain.News;
 import lombok.extern.slf4j.Slf4j;
