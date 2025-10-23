@@ -24,7 +24,7 @@ public class Diary {
 
     private LocalDate createdAt;
 
-    @Column(length = 255)
+    @Column(columnDefinition = "TEXT(1000)")
     private String content;
 
     // 전체 필드 생성자
