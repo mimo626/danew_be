@@ -36,7 +36,13 @@ public class AIController {
         if (cached.isPresent()) {
             return ResponseEntity.ok(new ApiResponse<>("success", "캐시에서 반환", cached.get().getSummary()));
         }
-        String prompt = content + "\n\n이 내용의 핵심을 파악해서 4줄 이내로 요약해줘. 부가적인 말을 필요없고, 요약한 내용만 반환해줘";
+
+        String prompt = content +
+                "\n" +
+                "---\n" +
+                "당신은 베테랑 뉴스 분석가입니다. 위 기사 서론만이 아닌 본문 전체의 내용을 바탕으로, " +
+                "독자가 반드시 알아야 할 핵심 사실(누가, 무엇을, 언제, 어디서, 왜)을 중심으로 4문장 이내로 요약해 주세요." +
+                "다른 문장 없이 뉴스 요약 내용만 반환해 주세요.\n";
         String summary = chatClient.prompt().user(prompt).call().content();
 
         if (summary == null) {
@@ -50,7 +56,7 @@ public class AIController {
         entity.setSummary(summary);
         newsSummaryRepository.save(entity);
 
-        log.info("AI 요역: {}", summary);
+        log.info("AI 요약: {}", summary);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ApiResponse<>("success", "뉴스 요약 성공", summary));
