@@ -24,7 +24,7 @@ public class News {
     @Column(length = 255)
     private String title;
 
-    @Column(columnDefinition = "TEXT(1000)")
+    @Column(columnDefinition = "TEXT")
     private String link;
 
     @Convert(converter = StringListConverter.class)
@@ -33,13 +33,13 @@ public class News {
     @Convert(converter = StringListConverter.class)
     private List<String> creator;
 
-    @Column(columnDefinition = "TEXT(1000)")
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(length = 45)
     private String pubDate;
 
-    @Column(columnDefinition = "TEXT(1000)")
+    @Column(columnDefinition = "TEXT")
     private String imageUrl;
 
     @Column(length = 45)
