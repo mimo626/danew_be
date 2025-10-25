@@ -18,7 +18,7 @@ public class NewsSummary {
     @Column(length = 255)
     private String articleId;   // PK
 
-    @Column(columnDefinition = "TEXT(1000)")
+    @Column(columnDefinition = "TEXT")
     private String summary;
 
 
