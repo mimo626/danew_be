@@ -50,7 +50,6 @@ public class AIController {
                     .body(new ApiResponse<>("error", "뉴스 요약 실패", null));
         }
 
-        // DB에 저장
         NewsSummary entity = new NewsSummary();
         entity.setArticleId(articleId);
         entity.setSummary(summary);
