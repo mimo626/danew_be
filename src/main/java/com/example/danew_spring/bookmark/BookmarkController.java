@@ -67,6 +67,16 @@ public class BookmarkController {
                 .body(new ApiResponse<>("success", "북마크 뉴스 조회 성공", bookmarks));
     }
 
+    @GetMapping(value = "/getBookmarkNews/{articleId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponse<News>> getBookmarkNews(@PathVariable String articleId ) {
+
+        News bookmarkNews = bookmarkService.getUserBookmarkNews(articleId);
+        log.info("북마크 뉴스 조회: {}", bookmarkNews);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse<>("success", "북마크 뉴스 조회 성공", bookmarkNews));
+    }
+
     @GetMapping(value = "/check-bookmark/{articleId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse<Boolean>> checkBookmark(
             @RequestHeader("Authorization") String token, @PathVariable String articleId) {
