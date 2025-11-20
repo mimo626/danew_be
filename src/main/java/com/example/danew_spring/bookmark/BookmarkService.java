@@ -56,4 +56,9 @@ public class BookmarkService {
         return newsList;
     }
 
+    public News getUserBookmarkNews(String articleId) {
+        return newsRepository.findNewsById(articleId);
+    }
+
+
 }
