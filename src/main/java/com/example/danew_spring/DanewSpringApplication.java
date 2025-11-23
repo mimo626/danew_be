@@ -7,6 +7,7 @@ public class DanewSpringApplication {
 
 	public static void main(String[] args) {
 
+
 		SpringApplication.run(DanewSpringApplication.class, args);
 	}
 
