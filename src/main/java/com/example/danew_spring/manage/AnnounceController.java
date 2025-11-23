@@ -24,9 +24,6 @@ public class AnnounceController {
     @Autowired
     private AnnounceService announceService;
 
-    @Autowired
-    private JwtTokenProvider jwtTokenProvider;
-
     // 1. 공지사항 저장 (관리자 기능)
     @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponse<Announce>> saveAnnounce(
