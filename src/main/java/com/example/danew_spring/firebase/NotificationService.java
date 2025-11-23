@@ -1,9 +1,7 @@
 package com.example.danew_spring.firebase;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 
 @Service
 @RequiredArgsConstructor
