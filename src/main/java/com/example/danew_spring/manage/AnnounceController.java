@@ -2,7 +2,6 @@ package com.example.danew_spring.manage;
 
 
 import com.example.danew_spring.ApiResponse;
-import com.example.danew_spring.JwtTokenProvider;
 import com.example.danew_spring.manage.domain.Announce;
 import com.example.danew_spring.manage.dto.AnnounceRequest;
 import lombok.extern.slf4j.Slf4j;
