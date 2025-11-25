@@ -60,6 +60,11 @@ public class AuthController {
                     .body(new ApiResponse<>("error", "비밀번호가 일치하지 않습니다.", null));
         }
 
+        // FCM 토큰이 변경된 경우 업데이트
+        if(!user.getFcmToken().equals(loginRequest.getFcmToken())){
+            user.setFcmToken(loginRequest.getFcmToken());
+        }
+
         // JWT 토큰 발급
         String token = jwtTokenProvider.generateToken(user.getUserId());
 
