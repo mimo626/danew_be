@@ -2,11 +2,8 @@ package com.example.danew_spring.auth.dto;
 
 import com.example.danew_spring.auth.domain.User;
 import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter

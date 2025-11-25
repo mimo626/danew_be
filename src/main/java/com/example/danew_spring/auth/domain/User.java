@@ -4,8 +4,6 @@ import com.example.danew_spring.auth.dto.StringListConverter;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
