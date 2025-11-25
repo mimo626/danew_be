@@ -9,13 +9,13 @@ class NotificationService {
     private final FcmPushSender fcmPushSender;
 
     // 예: 사용자가 입장했을 때 알림 보내기
-    public void sendEntryNotification(String fcmToken, String nickname) {
+    public void sendEntryNotification(String fcmToken, String title, String content) {
         if (fcmToken == null || fcmToken.isEmpty()) return;
 
         FcmSendDto fcmDto = FcmSendDto.builder()
                 .token(fcmToken)
-                .title("입장 알림")
-                .body(nickname + "님이 채팅방에 입장했습니다!")
+                .title(title)
+                .body(content)
                 .build();
 
         fcmPushSender.sendPushNotification(fcmDto);
