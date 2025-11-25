@@ -26,10 +26,14 @@ public class User {
     private List<String> keywordList;
     @Convert(converter = StringListConverter.class)
     private List<String> customList;
+    // ⭐ FCM 토큰 필드 추가
+    @Column(length = 500)
+    private String fcmToken;
 
 
     public User(String name, String userId, String password, Integer age,
-                String gender, String createdAt, List<String> keywordList, List<String> customList) {
+                String gender, String createdAt, List<String> keywordList, List<String> customList,
+                String fcmToken) {
         this.userId = userId;
         this.password = password;
         this.name = name;
@@ -38,5 +42,16 @@ public class User {
         this.createdAt = createdAt;
         this.keywordList = keywordList;
         this.customList = customList;
+        this.fcmToken = fcmToken;
+    }
+
+    // 토큰 업데이트를 위한 메서드
+    public void updateFcmToken(String token) {
+        this.fcmToken = token;
+    }
+
+    // 로그아웃 시 토큰 삭제를 위한 메서드
+    public void clearFcmToken() {
+        this.fcmToken = null;
     }
 }
