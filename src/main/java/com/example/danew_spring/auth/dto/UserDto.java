@@ -26,7 +26,8 @@ public class UserDto {
     private List<String> keywordList;
     @Convert(converter = StringListConverter.class)
     private List<String> customList;
+    private String fcmToken;
 
     public User toEntity() {return new User(name, userId, password, age,
-            gender, createdAt, keywordList, customList);}
+            gender, createdAt, keywordList, customList, fcmToken);}
 }
