@@ -61,7 +61,7 @@ public class AuthController {
         }
 
         // FCM 토큰이 변경된 경우 업데이트
-        if(!user.getFcmToken().equals(loginRequest.getFcmToken())){
+        if (user.getFcmToken() == null || !user.getFcmToken().equals(loginRequest.getFcmToken())) {
             user.updateFcmToken(loginRequest.getFcmToken());
         }
 
